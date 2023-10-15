@@ -7,6 +7,7 @@ Holds one class, BaseModel()
 
 import uuid
 from datetime import datetime
+from models import storage
 
 class BaseModel:
     """
@@ -21,7 +22,7 @@ class BaseModel:
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
         
-        if kwargs is not None:
+        if kwargs:
             for key, value in kwargs.items():
                 if key != '__class__':
                     if key == 'name' or key == 'my_number' or key == 'id':
@@ -31,6 +32,10 @@ class BaseModel:
                     self.__dict__[key] = self.key
             if 'key' in self.__dict__:  # removes the key `key` from dict
                 del self.__dict__['key']
+        
+        # If it's a new instance, add it to storage
+        if not kwargs:
+            storage.new(self)
         
     def __str__(self):
         """
@@ -43,6 +48,7 @@ class BaseModel:
         Updates the public instance attribute updated_at with the current datetime
         """
         self.updated_at = datetime.now()
+        storage.save()
         
     def to_dict(self):
         """
@@ -56,6 +62,6 @@ class BaseModel:
         """
         dict_representation = self.__dict__.copy()
         dict_representation["__class__"] = self.__class__.__name__
-        dict_representation["created_at"] = dict_representation["created_at"].isoformat()
-        dict_representation["updated_at"] = dict_representation["updated_at"].isoformat()
+        dict_representation["created_at"] = self.created_at.isoformat()
+        dict_representation["updated_at"] = self.updated_at.isoformat()
         return dict_representation

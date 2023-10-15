@@ -40,8 +40,8 @@ class BaseModelTest(unittest.TestCase):
         """
         Test the `__init__()` method of the `BaseModel` class with keyword arguments for datetime fields.
         """
-        created_at = datetime.fromisoformat('2023-10-11T14:43:38.559625')
-        updated_at = datetime.fromisoformat('2023-10-11T14:43:38.559625')
+        created_at = '2023-10-11T14:43:38.559625'
+        updated_at = '2023-10-11T14:43:38.559625'
         
         baseModel_instance = BaseModel(created_at=created_at, updated_at=updated_at)
         
